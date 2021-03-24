@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>AwesomeAnswersWaddSept2020</title>
+    <title>Awesome Answers</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +11,13 @@
   </head>
 
   <body>
+    <!-- "link_to" is a method known as a view helper. Use it to generate an anchor tag -->
+    <!-- <a href="/">Home</a> -->
+    <%= link_to 'Home', root_path %>
+    -
+    <%= link_to 'Contact Us', contact_new_path %>
+
+    <!-- yield will render the template of the current controller action -->
     <%= yield %>
   </body>
 </html>

@@ -23,6 +23,12 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+# All gems are automatically "required" for a Rails project so we can 
+# use them anywhere without having to "require gem_name"
+# Use pry for the rails console
+gem 'pry-rails'
+gem 'cowsay'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
