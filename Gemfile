@@ -28,6 +28,7 @@ gem 'jbuilder', '~> 2.7'
 # Use pry for the rails console
 gem 'pry-rails'
 gem 'cowsay'
+gem 'faker'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
