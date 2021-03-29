@@ -10,4 +10,31 @@ Rails.application.routes.draw do
   # for you, but we can rename it using the "as" option. All similar HTTP verbs have an associated
   # method named after the verb.
   get("/", { to: "welcome#index", as: "root" })
+
+  # === RESTful routes for questions ===
+
+  # Render a list of all questions
+  get('/questions', to: 'questions#index')
+
+  # Renders a form to create a new question
+  get('/questions/new', to: 'questions#new', as: :new_question) 
+
+  # Create a question (submitting the new question form
+  post('/questions', to: 'questions#create')
+
+  # Render a question show page
+  # Helper method would use the id as an argument
+  # question_path(<id>), question_url(<id>)
+  get('/questions/:id', to: 'questions#show', as: :question)
+  
+  # Render a form to edit an existing question
+  # Helper method would use the id as an argument
+  # edit_question_path(<id>), edit_question_url(<id>)
+  get('/questions/:id/edit', to: 'questions#edit', as: :edit_question)
+
+  # Update a question in the database
+  patch("/questions/:id", to: "questions#update")
+
+  # Deletes a question
+  delete('/questions/:id', to: 'questions#destroy')
 end
