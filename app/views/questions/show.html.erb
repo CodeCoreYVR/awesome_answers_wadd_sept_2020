@@ -1,0 +1,34 @@
+<h1><%= @question.title %></h1>
+
+<p><%= @question.body %></p>
+
+<div>
+  <p>
+    Viewed <%= pluralize(@question.view_count, 'time') %>
+  </p>
+  <p>
+    Asked <%= time_ago_in_words(@question.created_at) %> ago
+  </p>
+  <p>
+    Last edited <%= time_ago_in_words(@question.updated_at) %> ago
+  </p>
+  <div>
+    <%= link_to 'Edit', edit_question_path(@question) %>
+    |
+    <%# 
+      Regular HTML links can only make GET requests. "link_to"
+      allows us to use other verbs such as DELETE. We pass a named
+      argument called "method" with the symbol of the HTTP verb as
+      an argument. If you confirm with the dialog then it will 
+      make the request.
+    %>
+    <%= link_to(
+        'Delete', 
+        question_path(@question),
+        method: :delete,
+        data: { confirm: "Are you sure you want to delete this question?"}
+      ) 
+    %>
+  </div>
+</div>
+

@@ -1,0 +1,39 @@
+<%#
+  To create partials, we prefix the file name with an "_". When we 
+  render this from another view, we don't use the "_" in the name:
+  render "form"
+
+  To create a form for a resource (i.e. a model), use the 
+  "form_with" helper instead of the "form_tag". Its arguments are:
+  1. A named argument "model" which is assigned an instance of 
+    the model. This question instance will either be a new question
+    from the new action or an existing question from the edit
+    action. "form_with" checks to see if the instance of the 
+    question is persisted. If it is, upon submission of 
+    this form a PATCH request is made, otherwise it makes a POST.
+  2. A named argument "local". We set this to true so that it
+    doesn't submit the form using AJAX.
+  3. A block that is passed the form object as an argument where
+    we build the HTML inside of the form (e.g. labels, inputs,
+    submits). All data from the inputs in the form will be available
+    as name-value pairs nested in a hash named after the class of 
+    the passed model. e.g. { question: { title: "Hi", body: "Hello world" }}
+%>
+<%= form_with(model: @question, local: true) do |form| %>
+  <% if @question.errors.present? %>
+    <p>
+      <%= @question.errors.full_messages.join(", ") %>
+    </p>
+  <% end %>
+  <div>
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+  <div>
+    <%= form.label :body %>
+    <%= form.text_area :body %>
+  </div>
+
+  <%# The argument to "submit" is the text displayed on the submmit button %>
+  <%= form.submit(@product.new_record? ? 'Create' : 'Update') %>
+<% end %>
