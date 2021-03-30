@@ -1,4 +1,9 @@
 class QuestionsController < ApplicationController
+  # Pass a method name as a symbol to "before_action" to run it before all of the actions listed
+  # This will find the question using the "id" from the params and save it to @question,
+  # so all of the actions listed has the @question defined.
+  before_action :find_question, only: [:show, :edit, :update, :destroy]
+
   def new
     # Create a new instance of a question which will be
     # available as an argument to "form_with"
@@ -14,11 +19,6 @@ class QuestionsController < ApplicationController
     # the data. This is like doing response.send(req.body) in Express:
     # render json: params
 
-    # Use "require" on the params object to retrieve the nested 
-    # hash of a key corresponding to the form data. We can also 
-    # use "permit" to specify all input names that are allowable
-    # because sometimes we don't need all the values from a form. 
-    question_params = params.require(:question).permit(:title, :body)
     @question = Question.new question_params
 
     if @question.save
@@ -39,7 +39,6 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @question = Question.find params[:id]
   end
 
   def index
@@ -47,13 +46,9 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    @question = Question.find params[:id]
   end
 
   def update
-    @question = Question.find params[:id]
-    question_params = params.require(:question).permit(:title, :body)
-
     if @question.update question_params
       redirect_to question_path(@question)
     else
@@ -62,10 +57,21 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    # We don't need to define an instance variable here because
-    # we're not passing it to a view
-    question = Question.find params[:id]
-    question.destroy
+    @question.destroy
     redirect_to questions_path
+  end
+
+  private
+
+  def question_params
+    # Use "require" on the params object to retrieve the nested 
+    # hash of a key corresponding to the form data. We can also 
+    # use "permit" to specify all input names that are allowable
+    # because sometimes we don't need all the values from a form. 
+    params.require(:question).permit(:title, :body)
+  end
+
+  def find_question
+    @question = Question.find params[:id]
   end
 end
