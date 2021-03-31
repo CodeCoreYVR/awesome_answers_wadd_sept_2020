@@ -62,4 +62,15 @@ Rails.application.routes.draw do
     resources :answers, only: [:create, :destroy], shallow: true
   end
 
+  resources :users, only: [:new, :create]
+
+  # resource is singular if we perform CRUD actions on a single
+  # thing and not a collection of resources. There's no index 
+  # nor routes that have an :id wildcard. Even though the resource 
+  # is singular, the controller is still plural. The url will look 
+  # like this: 
+  # GET /session/new
+  # POST /session
+  # DELETE /session
+  resource :session, only: [:new, :create, :destroy]
 end

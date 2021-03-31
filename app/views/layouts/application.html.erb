@@ -17,10 +17,26 @@
     -
     <%= link_to 'Contact Us', contact_new_path %>
     -
-    <%= link_to 'All Questions', questions_path %>
+  <%= link_to 'All Questions', questions_path %>
     -
     <%= link_to 'New Question', new_question_path %>
-
+    -
+    <% if user_signed_in? %>
+      Hello, <%= current_user.full_name %>
+      -
+      <%= link_to 'Sign Out', session_path, method: :delete, data: {confirm: "Log out?" } %>
+    <% else %>
+      <%= link_to 'Sign In', new_session_path %>
+      -
+      <%= link_to 'Sign Up', new_user_path %>
+    <% end %>
+    <hr>
+    <% flash.each do |type, message| %>
+      <div class="alert alert-<%=type %>" role="alert">
+        <%= message %>
+      </div>
+    <% end %>
+    
     <!-- yield will render the template of the current controller action -->
     <%= yield %>
   </body>

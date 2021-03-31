@@ -13,6 +13,7 @@ class Answer < ApplicationRecord
   # The line below was added automatically when we generated this 
   # model with an association.
   belongs_to :question
+  belongs_to :user
 
   # With "belongs_to", the following instance methods are added to 
   # the Answer model. These simplify interactions with the associated question.

@@ -27,6 +27,7 @@ class Question < ApplicationRecord
   # "has_many" was not automatically added to this model when we generated
   # answers so make sure you add it when setting up associations. 
   has_many :answers, dependent: :destroy
+  belongs_to :user
 
   # "has_many" adds the following instance methods to the Question model:
 
