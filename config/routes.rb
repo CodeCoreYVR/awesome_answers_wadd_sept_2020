@@ -12,27 +12,54 @@ Rails.application.routes.draw do
   get("/", { to: "welcome#index", as: "root" })
 
   # Renders a form to create a new question
-  get("/questions/new", to: "questions#new", as: "new_question")
+  # get("/questions/new", to: "questions#new", as: "new_question")
 
   # Create a question (submitting the new question form)
-  post("/questions", to: "questions#create")
+  # post("/questions", to: "questions#create")
 
   # Render a question show page
   # Helper method would use the id or instance as an argument
   # question_path(<id>) or question_path(instance)
-  get("/questions/:id", to: "questions#show", as: "question")
+  # get("/questions/:id", to: "questions#show", as: "question")
 
   # Render a list of all questions
-  get("/questions", to: "questions#index")
+  # get("/questions", to: "questions#index")
 
   # Render a form to edit an existing question
   # Helper method would use the id or instance as an argument
   # edit_question_path(<id>) or edit_question_path(instance)
-  get("/questions/:id/edit", to: "questions#edit", as: "edit_question")
+  # get("/questions/:id/edit", to: "questions#edit", as: "edit_question")
 
   # Update a question in the database (submission of the edit form)
-  patch("/questions/:id", to: "questions#update")
+  # patch("/questions/:id", to: "questions#update")
 
   # Delete a question
-  delete("questions/:id", to: "questions#destroy")
+  # delete("questions/:id", to: "questions#destroy")
+
+  # The "resources" method will generate all the CRUD routes above
+  # following RESTful conventions for a resource. It will assume that
+  # there is a controller named after the first argument pluralized and
+  # PascalCased e.g. (:questions => QuestionsController)
+  resources :questions do 
+    # Routes written inside of a block passed to the "resources" will
+    # be prefixed by a path corresponding to the passed in symbol.
+    # In this case, all routes will be prefixed with "questions/:question_id"
+    # "only" creates the routes that we need and "except" will create 
+    # all the routes with the exception of the routes in the array.
+    
+    # Passing shallow: true will remove the prefix if it doesn't need it:
+
+    # The create action stays the same because we need the :question_id
+    # when creating an answer 
+    # POST /questions/:question_id/answers
+
+    # The prefix is removed for :destroy because we only need the id of 
+    # the answer we're destroying.
+    # DELETE /questions/:question_id/answers/:id
+    # becomes
+    # DELETE answers/:id
+
+    resources :answers, only: [:create, :destroy], shallow: true
+  end
+
 end

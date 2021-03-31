@@ -16,6 +16,38 @@ class Question < ApplicationRecord
   # When writing the attributes, we have prefix with self (instance)
   # self.title = "My new title"
 
+  # Adding the "dependent: :destroy" option tells Rails to delete the associated
+  # answers before deleting the question. This ensures that it doesn't violate
+  # the foreign_key constraint because the answer is deleted before the question.
+  # We could also use "dependent: :nullify" which will set all the "question_id" 
+  # columns of the associated answers to NULL before the question is destroyed. 
+  # If we don't set either dependent option we will end up with answers that 
+  # reference a "question_id" that don't exist anymore. Always set the dependent 
+  # option to maintain referential integrity. 
+  # "has_many" was not automatically added to this model when we generated
+  # answers so make sure you add it when setting up associations. 
+  has_many :answers, dependent: :destroy
+
+  # "has_many" adds the following instance methods to the Question model:
+
+  # answers
+  # answers<<(object, ...)
+  # answers.delete(object, ...)
+  # answers.destroy(object, ...)
+  # answers=(objects)
+  # answers_singular_ids
+  # answers_singular_ids=(ids)
+  # answers.clear
+  # answers.empty?
+  # answers.size
+  # answers.find(...)
+  # answers.where(...)
+  # answers.exists?(...)
+  # answers.build(attributes = {})
+  # answers.create(attributes = {})
+  # answers.create!(attributes = {})
+  # answers.reload
+
   # === VALIDATIONS ===
   # To create validations, use the "validates" method.
   # The arguments are:
