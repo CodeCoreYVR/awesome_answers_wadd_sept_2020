@@ -30,6 +30,7 @@ gem 'pry-rails'
 gem 'cowsay'
 gem 'faker'
 gem 'cancancan'
+gem 'rails-erd'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
