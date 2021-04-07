@@ -25,7 +25,7 @@ class QuestionsController < ApplicationController
 
     @question = Question.new question_params
     @question.user = current_user
-
+ 
     if @question.save
       # Use "redirect_to" to tell the browser to make a new request.
       # The method takes in a route helper as an argument. For the 
