@@ -1,5 +1,6 @@
 # To generate this factory run:
 # rails g factory_bot:model job_post
+# in the factory file we have access to the column names as methods which takes a block to generate fake infos for us
 
 DESCRIPTION = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, incidunt modi. Dolorum, libero fugiat. Magnam distinctio fugit id? Incidunt laudantium porro facilis quas ipsa deserunt error perspiciatis temporibus aut recusandae.'
 
@@ -24,3 +25,15 @@ end
 
 # FactoryBot.create(:job_post)  👈🏻So this will create a object and save it in a database
 # Factory.build(:job_post) 👈🏻 So this wi0ll give us an object like .new but will not save in database 
+# FactoryBot.attributes_for(:job_post)
+# Returns a plain hash of the parameters required to create
+# a JobPost
+
+# FactoryBot.build(:job_post)
+# Returns a new un-saved instance of JobPost
+# (using the factory)
+
+# We can also overwrite the FactoryBot
+# job_post_a = FactoryBot.create(
+#   :job_post, title: "Software Engineer"
+# )
