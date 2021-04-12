@@ -73,4 +73,6 @@ Rails.application.routes.draw do
   # POST /session
   # DELETE /session
   resource :session, only: [:new, :create, :destroy]
+
+  resources :job_posts, only: [:new, :create, :show]
 end

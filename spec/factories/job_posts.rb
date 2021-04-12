@@ -14,6 +14,9 @@
 # We can override the FactoryBot attributes by passing a hash as a second argument:
 # Factory.create(:job_post, title: "Software Engineer")
 
+# Returns a plain hash of the parameters required to create a JobPost
+# FactoryBot.attributes_for(:job_post)
+
 DESCRIPTION = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, voluptatem ipsam optio totam provident suscipit sequi dolorem aliquid expedita corporis corrupti id sint fugiat debitis eligendi facere quasi saepe ea eum cum odit animi? Earum molestias architecto a quidem suscipit!"
 
 # All of your factories must always generate valid instances of your models
