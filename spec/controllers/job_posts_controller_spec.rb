@@ -1,91 +1,131 @@
 require 'rails_helper'
 
 RSpec.describe JobPostsController, type: :controller do
+  def current_user
+    @current_user ||= FactoryBot.create(:user)
+  end
   describe("#new") do
-    it("renders a new template") do
-      # GIVEN
-      # defaults
+    context "without signed in user" do
+      it "redirects the user to sign in page" do
+        get(:new)
 
-      # WHEN
-      # Make GET request to the new action
-      # When testing controllers, use methods named after HTTP verbs (e.g. get, post,
-      # patch, put, delete) to simulate HTTP requests to your controller actions.
-      get(:new)
+        expect(response).to redirect_to(new_session_path)
+      end
 
-      # THEN
-      # The "response" object is available inside any controller test and it also has
-      # the rendered template. We also have "flash" and "session" objects available to test.
+      it "sets a danger flash message" do
+        get :new
 
-      # We expect the response to render "new.html.erb". For this we'll use a method
-      # called "render_template" which comes with a gem: "rails-controller-testing"
-      expect(response).to(render_template(:new))
+        expect(flash[:danger]).to be
+      end
     end
+    context "with signed in user" do
+      # Use 'before' to tun a block of code before
+      # all tests inside of a block. In this case,
+      # the following block will be run before the
+      # two tests inside this context's block.
+      before do
+        # sign in current_user
+        session[:user_id] = current_user.id
+      end
+      it("renders a new template") do
+        # GIVEN
+        # defaults
 
-    it("sets an instance variable of a new job post") do
-      get(:new)
+        # WHEN
+        # Make GET request to the new action
+        # When testing controllers, use methods named after HTTP verbs (e.g. get, post,
+        # patch, put, delete) to simulate HTTP requests to your controller actions.
+        get(:new)
 
-      # assigns(:job_post) returns the value of the instance variable named
-      # after the symbol argument (e.g. :job_post -> @job_post)
-      # Only available with the gem "rails-controller-testing"
+        # THEN
+        # The "response" object is available inside any controller test and it also has
+        # the rendered template. We also have "flash" and "session" objects available to test.
 
-      # This will verify that the expected value is a new instance
-      # of the JobPost model
-      expect(assigns(:job_post)).to(be_a_new(JobPost))
+        # We expect the response to render "new.html.erb". For this we'll use a method
+        # called "render_template" which comes with a gem: "rails-controller-testing"
+        expect(response).to(render_template(:new))
+      end
+
+      it("sets an instance variable of a new job post") do
+        get(:new)
+
+        # assigns(:job_post) returns the value of the instance variable named
+        # after the symbol argument (e.g. :job_post -> @job_post)
+        # Only available with the gem "rails-controller-testing"
+
+        # This will verify that the expected value is a new instance
+        # of the JobPost model
+        expect(assigns(:job_post)).to(be_a_new(JobPost))
+      end
     end
   end
 
   describe("#create") do
-    context("with valid parameters") do
-      it("creates a new job post") do
-        # GIVEN
-        count_before = JobPost.count 
-
-        # WHEN
-        # Returns a plain hash of the parameters required to create a JobPost
-        # This hash simulates the body of a form, which is nested under params[:job_post]
-        post(:create, params: { job_post: FactoryBot.attributes_for(:job_post) })
-
-        # THEN
-        count_after = JobPost.count
-
-        expect(count_after).to(eq(count_before + 1))
-      end
-
-      it("redirects to the show page of that job post") do
-        post(:create, params: { job_post: FactoryBot.attributes_for(:job_post) })
-        
-        job_post = JobPost.last
-        
-        expect(response).to(redirect_to(job_post_path(job_post)))
+    def valid_request
+      post(:create, params: { job_post: FactoryBot.attributes_for(:job_post) })
+    end
+    context "without signed in user" do
+      it "redirects to the new session path" do
+        valid_request
+        expect(response).to redirect_to(new_session_path)
       end
     end
-
-    context("with invalid parameters") do
-      def invalid_request
-        post(:create, params: { job_post: FactoryBot.attributes_for(:job_post, title: nil )})
+    context "with signed in user" do
+      before do
+        session[:user_id] = current_user.id
       end
+      context("with valid parameters") do
 
-      it("doesn't create a new job post") do
-        count_before = JobPost.count
+        it("creates a new job post") do
+          # GIVEN
+          count_before = JobPost.count 
 
-        invalid_request
+          # WHEN
+          # Returns a plain hash of the parameters required to create a JobPost
+          # This hash simulates the body of a form, which is nested under params[:job_post]
+          valid_request
 
-        count_after = JobPost.count
-        expect(count_after).to(eq(count_before))
+          # THEN
+          count_after = JobPost.count
+
+          expect(count_after).to(eq(count_before + 1))
+        end
+
+        it("redirects to the show page of that job post") do
+          valid_request
+          
+          job_post = JobPost.last
+          
+          expect(response).to(redirect_to(job_post_path(job_post)))
+        end
       end
+      context("with invalid parameters") do
+        def invalid_request
+          post(:create, params: { job_post: FactoryBot.attributes_for(:job_post, title: nil )})
+        end
 
-      it("renders the new template") do
-        invalid_request
-        expect(response).to(render_template(:new))
-      end
+        it("doesn't create a new job post") do
+          count_before = JobPost.count
 
-      it("assigns an invalid job post as an instance variable") do
-        invalid_request
+          invalid_request
 
-        # "be_a" checks that the expected value is an instance of the 
-        # given class
-        expect(assigns(:job_post)).to(be_a(JobPost))
-        expect(!assigns(:job_post).valid?)
+          count_after = JobPost.count
+          expect(count_after).to(eq(count_before))
+        end
+
+        it("renders the new template") do
+          invalid_request
+          expect(response).to(render_template(:new))
+        end
+
+        it("assigns an invalid job post as an instance variable") do
+          invalid_request
+
+          # "be_a" checks that the expected value is an instance of the 
+          # given class
+          expect(assigns(:job_post)).to(be_a(JobPost))
+          expect(!assigns(:job_post).valid?)
+        end
       end
     end
 
@@ -110,6 +150,49 @@ RSpec.describe JobPostsController, type: :controller do
         get(:show, params: { id: job_post.id })
 
         expect(assigns(:job_post)).to(eq(job_post))
+      end
+    end
+  end
+  describe "#destroy" do
+    context "without signed in user" do
+      it "redirects to the new session path" do
+        job_post = FactoryBot.create(:job_post)
+        delete(:destroy, params: { id: job_post.id })
+        expect(response).to redirect_to new_session_path
+      end
+    end
+    context "with signed in user" do
+      before do
+        session[:user_id] = current_user.id
+      end
+      context "as non-owner" do
+        it "doesn't remove the job post" do
+          job_post = FactoryBot.create(:job_post)
+          delete(:destroy, params: { id: job_post.id })
+          expect(JobPost.find_by(id: job_post.id)).to(eq(job_post))
+        end
+        it "redirects to the job post show" do
+          job_post = FactoryBot.create(:job_post)
+          delete(:destroy, params: { id: job_post.id })
+          expect(response).to redirect_to(job_post_url(job_post.id))
+        end
+        it "flashes a danger message" do
+          job_post = FactoryBot.create(:job_post)
+          delete(:destroy, params: { id: job_post.id })
+          expect(flash[:danger]).to be
+        end
+      end
+      context "as owner" do
+        it "removes a job post from the db" do
+          job_post = FactoryBot.create(:job_post, user: current_user)
+          delete(:destroy, params: { id: job_post.id })
+          expect(JobPost.find_by(id: job_post.id)).not_to be
+        end
+        it "redirects to the home page" do
+          job_post = FactoryBot.create(:job_post, user: current_user)
+          delete(:destroy, params: { id: job_post.id })
+          expect(response).to redirect_to(root_path)
+        end
       end
     end
   end

@@ -74,5 +74,5 @@ Rails.application.routes.draw do
   # DELETE /session
   resource :session, only: [:new, :create, :destroy]
 
-  resources :job_posts, only: [:new, :create, :show]
+  resources :job_posts, only: [:new, :create, :show, :destroy]
 end
