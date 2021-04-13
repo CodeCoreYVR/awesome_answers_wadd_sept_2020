@@ -37,6 +37,10 @@ class Ability
       answer.user == user || answer.question.user == user
     end
 
+    can :crud, JobPost do |job_post|
+      user == job_post.user
+    end
+
     if user.is_admin?
       # :manage means they can do everything (not just CRUD)
       # :all means all resources or classes

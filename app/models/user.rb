@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # any of their associated questions or answers
   has_many :questions, dependent: :nullify
   has_many :answers, dependent: :nullify
+  has_many :job_posts, dependent: :nullify
 
   has_secure_password
   # Provides user authentication features on the model that it is

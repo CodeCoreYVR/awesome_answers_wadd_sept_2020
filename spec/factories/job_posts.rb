@@ -34,6 +34,10 @@ FactoryBot.define do
     location { Faker::Address.city }
     min_salary { rand(30_000..100_000) }
     max_salary { rand(100_000..200_000) }
+
+    # This will create a user using the user factory before creating the job_post
+    # This is necessary to pass the validation added by "belongs_to :user" 
+    association(:user, factory: :user)
   end
 end
 
