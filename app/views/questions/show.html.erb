@@ -11,10 +11,29 @@
 </p>
 <p>
   Last edited <%= time_ago_in_words(@question.updated_at) %> ago
+  |
+  <%= pluralize(@question.likes.count, "like") %>
 </p>
-
-<% if can?(:crud, @question) %>
-  <div>
+<div>
+  <% if @like.present? %>
+    <%= 
+      link_to(
+        "Unlike",
+        question_like_path(@question, @like),
+        method: :delete
+      )
+    %>
+  <% else %>
+    <%= 
+      link_to(
+        "Like",
+        question_likes_path(@question),
+        method: :post
+      )
+    %>
+  <% end %>
+  |
+  <% if can?(:crud, @question) %>
     <%= link_to 'Edit', edit_question_path(@question) %>
     |
     <%# 
@@ -31,8 +50,8 @@
         data: { confirm: "Are you sure you want to delete this question?"}
       ) 
     %>
-  </div>
-<% end %>
+  <% end %>
+</div>
 <h2><%= @answers.count %> Answers</h2>
 
 <%# 

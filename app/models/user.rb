@@ -5,6 +5,16 @@ class User < ApplicationRecord
   has_many :answers, dependent: :nullify
   has_many :job_posts, dependent: :nullify
 
+  # "has_many" can take a "through" named argument to create a many-to-many
+  # relationship cia another "has_many" declaration. The "through" corresponds
+  # to the join table (plural) between the two tables that share the many-to-many. We 
+  # also specify the "source" which is named after the model (singular).
+  # "liked_questions" (plural) is not a column. It is the joint of all the questions
+  # through the "likes" join table for this user instance. We can name this whatever
+  # we went. user.liked_questions will give us all questions that are liked by this user.
+  has_many :likes, dependent: :destroy
+  has_many :liked_questions, through: :likes, source: :question
+
   has_secure_password
   # Provides user authentication features on the model that it is
   # called in. It requires a column named "password_digest" to store

@@ -41,6 +41,24 @@ class Ability
       user == job_post.user
     end
 
+    can :like, Question do |question|
+      # This unsures that you cannot like your own question
+      user.persisted? && question.user != user
+
+      # If the current_user is not logged in we set "user" to
+      # be a new user (guest) from line 15:
+      # user ||= User.new # (guest user) not logged in
+      # If "user" is a guest user, then"
+      # question.user != user
+      # will also be true. Therefore we'll also check if the user
+      # is in the database as well (logged in) because we don't 
+      # guests to be able to like.
+    end
+
+    can :destroy, Like do |like|
+      like.user == user
+    end
+
     if user.is_admin?
       # :manage means they can do everything (not just CRUD)
       # :all means all resources or classes

@@ -29,6 +29,9 @@ class Question < ApplicationRecord
   has_many :answers, dependent: :destroy
   belongs_to :user
 
+  has_many :likes, dependent: :destroy
+  has_many :likers, through: :likes, source: :user
+
   # "has_many" adds the following instance methods to the Question model:
 
   # answers

@@ -50,6 +50,10 @@ class QuestionsController < ApplicationController
 
     # For list of answers to display
     @answers = @question.answers.order(created_at: :desc)
+
+    # Finds the like of the question by the current_user
+    # If user did not previously like, @like will be nil
+    @like = @question.likes.find_by(user: current_user)
   end
 
   def index

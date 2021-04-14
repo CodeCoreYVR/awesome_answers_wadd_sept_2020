@@ -8,6 +8,7 @@
 
 PASSWORD = "supersecret"
 
+Like.delete_all
 Answer.delete_all
 Question.delete_all
 User.delete_all
@@ -56,10 +57,12 @@ users = User.all
         user: users.sample,
       )
     end
+    q.likers = users.shuffle.slice(0, rand(users.count))
   end
 end
 
 puts Cowsay.say("Generated #{Question.count} questions", :koala)
 puts Cowsay.say("Generated #{Answer.count} answers", :stegosaurus)
 puts Cowsay.say("Generated #{User.count} users", :ghostbusters)
+puts Cowsay.say("Generated #{Like.count} likes", :tux)
 puts Cowsay.say("Sign in with #{super_user.email} and password: #{PASSWORD}", :cow)
