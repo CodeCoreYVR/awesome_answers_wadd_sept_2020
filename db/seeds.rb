@@ -8,6 +8,8 @@
 
 PASSWORD = "supersecret"
 
+Tagging.delete_all
+Tag.delete_all
 Like.delete_all
 Answer.delete_all
 Question.delete_all
@@ -31,6 +33,14 @@ super_user = User.create(
 end
 
 users = User.all
+
+20.times do
+  Tag.create(
+    name: Faker::Book.genre
+  )
+end
+
+tags = Tag.all
 
 200.times do
   created_at = Faker::Date.backward(365 * 5)
@@ -58,6 +68,7 @@ users = User.all
       )
     end
     q.likers = users.shuffle.slice(0, rand(users.count))
+    q.tags = tags.shuffle.slice(0, rand(10))
   end
 end
 
@@ -65,4 +76,5 @@ puts Cowsay.say("Generated #{Question.count} questions", :koala)
 puts Cowsay.say("Generated #{Answer.count} answers", :stegosaurus)
 puts Cowsay.say("Generated #{User.count} users", :ghostbusters)
 puts Cowsay.say("Generated #{Like.count} likes", :tux)
+puts Cowsay.say("Generated #{Tag.count} tags", :bunny)
 puts Cowsay.say("Sign in with #{super_user.email} and password: #{PASSWORD}", :cow)

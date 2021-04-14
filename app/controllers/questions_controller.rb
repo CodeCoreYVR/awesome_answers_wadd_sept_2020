@@ -84,8 +84,11 @@ class QuestionsController < ApplicationController
     # Use "require" on the params object to retrieve the nested 
     # hash of a key corresponding to the form data. We can also 
     # use "permit" to specify all input names that are allowable
-    # because sometimes we don't need all the values from a form. 
-    params.require(:question).permit(:title, :body)
+    # because sometimes we don't need all the values from a form.
+    
+    # We need to pass an array to specify that it will be a
+    # multi-selection from the form
+    params.require(:question).permit(:title, :body, tag_ids: [])
   end
 
   def find_question

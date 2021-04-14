@@ -34,6 +34,32 @@
     <%= form.text_area :body %>
   </div>
 
+  <div>
+    <%# 
+      :tag_ids 
+        this is the method called on the @question e.g. @question.tag_ids
+        Only the tags in tags_id are selected in the checkbox. In the edit
+        form, @question is persisted and there will be some tags selected 
+        already, while a new @question will have none selected
+      Tag.all
+        This is the collection of objects to create checkboxes for
+      :id 
+        This is the value_method, which is called on each element of Tag.all.
+        The return value is what is used for the HTML value attribute
+        of this checkbox
+      :name
+        This is the text_method, which is called on each element of Tag.all.
+        The return value is what is used for the context of each checkbox tag,
+        used for box.text
+     %>
+    <%= form.collection_check_boxes :tag_ids, Tag.all, :id, :name do |box| %>
+      <span class="tag-wrapper">
+        <%= box.check_box %>
+        <%= box.text %>
+      </span>
+    <% end %>
+  </div>
+
   <%# The argument to "submit" is the text displayed on the submmit button %>
   <%= form.submit(@question.new_record? ? 'Create' : 'Update') %>
 <% end %>

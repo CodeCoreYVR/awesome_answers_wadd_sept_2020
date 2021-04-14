@@ -32,6 +32,11 @@ class Question < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
 
+  has_many :taggings, dependent: :destroy
+  has_many :tags, through: :taggings # , source: :tag
+  # If the name of the association (tags) is the same as the source singularized (tag)
+  # the source named argument can be ommited
+
   # "has_many" adds the following instance methods to the Question model:
 
   # answers
