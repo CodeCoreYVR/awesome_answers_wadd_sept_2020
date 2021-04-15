@@ -99,6 +99,25 @@ class Question < ApplicationRecord
 
   scope(:search, ->(word){ where('title ILIKE ? OR body ILIKE ?', "%#{word}%", "%#{word}%") })
 
+  def tag_names 
+    self.tags.map(&:name).join(", ")
+  end
+
+  # Appending "=" at the end of the method name allows us to implement a 
+  # setter. This is a method that's assignable:
+  # question.tag_names = "red, sports, rails"
+
+  # "red, sports, rails" become the argument of the method, e.g. "new_tags"
+  # /\s*,\s*/ removes the spaces and separates by commas
+  # We assign the tags of the question to be a new set of tags
+  def tag_names=(new_tags)
+    self.tags = new_tags.strip.split(/\s*,\s*/).map do |tag_name|
+      # Finds the first record with the given attributes, but if it's
+      # not found, a new record is initialied (Tag.new)
+      Tag.find_or_initialize_by(name: tag_name)
+    end
+  end
+
   # === CALLBACKS ===
   # There exists many callbacks that run at different 
   # stages of a record's lifecycle. List of callbacks found here:

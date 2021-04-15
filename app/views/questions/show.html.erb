@@ -15,14 +15,21 @@
   <%= pluralize(@question.likes.count, "like") %>
 </p>
 
-<p>
-  Tags: <%= @question.tags.map { |tag| tag.name }.join(", ") %>
+<div>
   <%# 
+    @question.tags.map { |tag| tag.name }.join(", ")
     Passing &:name to any enumerable method will call .name 
     on each element. Below is the same as above:
     @question.tags.map(&:name).join(", ") 
   %>
-</p>
+  <% @question.tags.each do |tag| %>
+    <%= link_to(
+      tag.name, 
+      questions_path(tag: tag.name),
+      class: "badge badge-success"
+    ) %>
+  <% end %>
+</div>
 
 <div>
   <% if @like.present? %>

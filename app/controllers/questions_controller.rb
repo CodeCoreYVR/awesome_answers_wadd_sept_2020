@@ -57,7 +57,12 @@ class QuestionsController < ApplicationController
   end
 
   def index
-    @questions = Question.all.order(created_at: :desc)
+    if params[:tag].present?
+      @tag = Tag.find_or_initialize_by(name: params[:tag])
+      @questions = @tag.questions.order(created_at: :desc)
+    else
+      @questions = Question.all.order(created_at: :desc)
+    end
   end
 
   def edit
@@ -87,8 +92,9 @@ class QuestionsController < ApplicationController
     # because sometimes we don't need all the values from a form.
     
     # We need to pass an array to specify that it will be a
-    # multi-selection from the form
-    params.require(:question).permit(:title, :body, tag_ids: [])
+    # multi-selection from the form if we use checkboxes
+    # params.require(:question).permit(:title, :body, tag_ids: [])
+    params.require(:question).permit(:title, :body, :tag_names)
   end
 
   def find_question

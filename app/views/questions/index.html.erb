@@ -1,4 +1,12 @@
 <h1>All Questions</h1>
+<% if @tag.present? %>
+  <h6>
+    Showing questions tagged by 
+    <span class="badge badge-success">
+      <%= @tag.name %>
+    </span>
+  </h6>
+<% end %>
 
 <ul>
   <% @questions.each do |question| %>
