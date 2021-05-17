@@ -1,4 +1,5 @@
-class Api::V1::QuestionsController < ApplicationController
+class Api::V1::QuestionsController < Api::ApplicationController
+    before_action :find_question, only:[:show, :destroy, :update]
 
     def index
         questions = Question.order created_at: :desc
@@ -6,10 +7,23 @@ class Api::V1::QuestionsController < ApplicationController
     end
 
     def show
-        questions = Question.find params[:id]
-        render json: questions
+        #question = Question.find params[:id]
+        render json: @question
     end
 
+    def destroy
+        #question = Question.find params[:id]
+        if @question.destroy
+            head :ok
+        else
+            head :bad_request
+        end
+    end
+
+    private
+    def find_question
+        @question = Question.find params[:id]
+    end
 end
 
 
