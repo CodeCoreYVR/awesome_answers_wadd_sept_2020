@@ -2,7 +2,7 @@ class Api::V1::QuestionsController < ApplicationController
 
     def index
         questions = Question.order created_at: :desc
-        render json: questions
+        render json: questions, each_serializer: QuestionCollectionSerializer
     end
 
     def show
