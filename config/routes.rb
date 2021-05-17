@@ -84,6 +84,8 @@ Rails.application.routes.draw do
   # api/questions
   # The namespace method will use the controller found in a directory
   # called api and then in a nested directory for v1
+  # 'defaults: {format: :json}' will set the default format to be JSON
+  # in all routes contained within the block.
 
   namespace :api, defaults: {format: :json} do
     namespace :v1 do
