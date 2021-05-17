@@ -63,6 +63,12 @@ class QuestionsController < ApplicationController
     else
       @questions = Question.all.order(created_at: :desc)
     end
+
+    respond_to do |format|
+      format.html {render}
+      format.json { render json: @questions}
+    end
+
   end
 
   def edit

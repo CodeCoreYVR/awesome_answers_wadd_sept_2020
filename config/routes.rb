@@ -79,4 +79,16 @@ Rails.application.routes.draw do
   resource :session, only: [:new, :create, :destroy]
 
   resources :job_posts
+
+  # api/v1/questions
+  # api/questions
+  # The namespace method will use the controller found in a directory
+  # called api and then in a nested directory for v1
+
+  namespace :api, defaults: {format: :json} do
+    namespace :v1 do
+      resources :questions
+    end
+  end
+
 end
