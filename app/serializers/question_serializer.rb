@@ -6,9 +6,7 @@ class QuestionSerializer < ActiveModel::Serializer
   end
 
   belongs_to :user, key: :author
-  class UserSerializer < ActiveModel::Serializer
-    attributes :id, :first_name, :last_name, :full_name
-  end
+
 
   has_many :answers
 
